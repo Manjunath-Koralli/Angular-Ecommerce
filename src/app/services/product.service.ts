@@ -9,15 +9,21 @@ import { map } from 'rxjs/operators';
 })
 export class ProductService {
 
-  private getUrl = "http://localhost:8088/products";
+  private baseUrl = "http://localhost:8088/products";
+  
 
   constructor(private http: HttpClient) { 
 
   }
 
   getProducts(){
-    return this.http.get(this.getUrl);
-    
+    return this.http.get(this.baseUrl);
+  }
+
+  getProductsByCat(categoryId : number){
+    //this.baseUrl+"/category/"+categoryId;
+    const getCategoryByIdUrl = "http://localhost:8088/category/"+categoryId;
+    return this.http.get(getCategoryByIdUrl);
   }
 }
 
