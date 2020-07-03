@@ -16,10 +16,12 @@ export class ProductService {
 
   }
 
+  //All Products
   getProducts(){
     return this.http.get(this.baseUrl);
   }
 
+  //Products By Category Id
   getProductsByCat(categoryId : number){
     //this.baseUrl+"/category/"+categoryId;
     const getCategoryByIdUrl = "http://localhost:8088/category/"+categoryId;
