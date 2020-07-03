@@ -5,10 +5,11 @@ import { SearchComponent } from './components/search/search.component';
 
 
 const routes: Routes = [
-  { path:'products/search/:keyword', component: SearchComponent},
+  { path:'products', component: ProductListComponent},
+  { path:'products/search/:keyword', component: ProductListComponent},
   { path:'category/:id', component: ProductListComponent},
   { path:'category', component: ProductListComponent},
-  { path:'products', component: ProductListComponent},
+  
   { path:'', redirectTo:'/products', pathMatch:'full'},
   { path:'**', redirectTo:'/products', pathMatch:'full'},
 ];

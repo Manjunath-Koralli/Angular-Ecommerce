@@ -27,6 +27,13 @@ export class ProductService {
     const getCategoryByIdUrl = "http://localhost:8088/category/"+categoryId;
     return this.http.get(getCategoryByIdUrl);
   }
+
+  //Products By keyword
+  getProductsByKey(keyWord : string){
+    //this.baseUrl+"/category/"+categoryId;
+    const getCategoryByKeyUrl = "http://localhost:8088/products/search/"+keyWord;
+    return this.http.get(getCategoryByKeyUrl);
+  }
 }
 
   
