@@ -51,7 +51,7 @@ export class ProductListComponent implements OnInit {
       const keyword : string = this.route.snapshot.paramMap.get('keyword');
       this.productService.getProductsByKey(keyword)
         .subscribe((res : Product[]) => {
-          console.log(res);
+          //console.log(res);
           this.products = res;
         })
     }
@@ -68,14 +68,14 @@ export class ProductListComponent implements OnInit {
 
     //check if "id" is available - returns true or false
     const hasCategoryId : boolean = this.route.snapshot.paramMap.has('id');
-    console.log(hasCategoryId);
+    //console.log(hasCategoryId);
     if(hasCategoryId){
       // "+" - converts it into integer => +this.route.snapshot.paramMap.get('id');
       this.currentCategoryId = +this.route.snapshot.paramMap.get('id');
       console.log(this.currentCategoryId);
       this.productService.getProductsByCat(this.currentCategoryId)
         .subscribe((res : Product[])=>{
-          console.log(res);
+          //console.log(res);
           this.products = res;
         });
     }

@@ -34,6 +34,13 @@ export class ProductService {
     const getCategoryByKeyUrl = "http://localhost:8088/products/search/"+keyWord;
     return this.http.get(getCategoryByKeyUrl);
   }
+
+   //Product Detail
+   getProductDetail(productId : number){
+    //this.baseUrl+"/category/"+categoryId;
+    const getProductUrl = "http://localhost:8088/product/"+productId;
+    return this.http.get(getProductUrl);
+  }
 }
 
   
