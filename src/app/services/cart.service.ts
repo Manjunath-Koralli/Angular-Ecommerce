@@ -7,6 +7,7 @@ import { CompileShallowModuleMetadata } from '@angular/compiler';
   providedIn: 'root'
 })
 export class CartService {
+  
 
   cartItems : CartItem[] = [];
 
@@ -86,5 +87,28 @@ export class CartService {
     console.log(`total price: ${totalPriceValue.toFixed(2)}, total quantity: ${totalQuantityValue}`);
     console.log("---");
 
+  }
+
+  decrementQuantity(cartItem: CartItem) {
+    cartItem.quantity--;
+    if(cartItem.quantity === 0 ){
+      this.remove(cartItem);
+    }
+    else {
+      this.computeCartTotals();
+    }
+  }
+
+  remove(cartItem: CartItem) {
+    
+    //get Index of item in array
+    const itemIndex = this.cartItems.findIndex( tempCartItem => tempCartItem.id === cartItem.id );
+
+    //if found remove item from array at given index
+    if(itemIndex > -1){
+      //remove 1 item
+      this.cartItems.splice(itemIndex,1);
+      this.computeCartTotals();
+    }
   }
 }
