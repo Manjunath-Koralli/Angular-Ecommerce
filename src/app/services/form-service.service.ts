@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Country } from '../common/country';
 
 
 @Injectable({
@@ -7,7 +9,10 @@ import { Observable, of } from 'rxjs';
 })
 export class FormServiceService {
 
-  constructor() { }
+  private countriesUrl = "http://localhost:8088/countries";
+  private statesUrl = "http://localhost:8088/states";
+
+  constructor(private httpClient : HttpClient) { }
 
   getCreditCardMonths(startMonth : number) : Observable<number[]> {
     let monthData : number[] = [];
@@ -39,6 +44,15 @@ export class FormServiceService {
     //wrapper an object as an  observable 
     return of(yearData);
   }
+
+  getCountries(){
+    return this.httpClient.get(this.countriesUrl);
+  }
+
+  getStatesByCcode(cCode : string){
+    const getStatesByCodeUrl = `${this.statesUrl}/search/${cCode}`;
+    return this.httpClient.get(getStatesByCodeUrl);
+  } 
 
 
 }

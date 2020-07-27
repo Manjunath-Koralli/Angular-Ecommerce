@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { FormServiceService } from 'src/app/services/form-service.service';
+import { Country } from 'src/app/common/country';
+import { State } from 'src/app/common/state';
 
 @Component({
   selector: 'app-checkout',
@@ -15,6 +17,10 @@ export class CheckoutComponent implements OnInit {
   
   creditCardYears : number[] = [];
   creditCardMonths : number[] = [];
+  countries : Country[] = [];
+  
+  shippingAddressState : State[] = [];
+  billingAddressState : State[] = [];
 
   constructor(private formBuilder : FormBuilder, private formService : FormServiceService) { }
 
@@ -66,21 +72,32 @@ export class CheckoutComponent implements OnInit {
         this.creditCardYears = data
       }
     )
+
+    //populate countries
+    this.formService.getCountries()
+    .subscribe((res : Country[])=>{
+        console.log(res);
+        this.countries = res;
+    })
   }
 
   copySAddrtoBAddr(event){
     if(event.target.checked){
       this.checkoutForm.controls.billingAddress
         .setValue(this.checkoutForm.controls.shippingAddress.value);
+
+      //Copy bug fix states
+      this.billingAddressState = this.shippingAddressState;
     }
     else {
       this.checkoutForm.controls.billingAddress.reset();
+
+      //Copy bug fix states
+      this.billingAddressState = [];
     }
   }
 
-  onSubmit(){
-    console.log(this.checkoutForm.get('Customer').value);
-  }
+  
 
   handleMonthAndYears(){
     const creditCardFormGroup = this.checkoutForm.get('creditCard');
@@ -100,6 +117,30 @@ export class CheckoutComponent implements OnInit {
         this.creditCardMonths = data;
       }
     )
+  }
+
+  getStates(formGroupName : string){
+    const formGroup = this.checkoutForm.get(formGroupName);
+    const countryCode = formGroup.value.country.code;
+    const countryName = formGroup.value.country.name;
+
+    this.formService.getStatesByCcode(countryCode)
+      .subscribe(
+        (data : State[]) => {
+          if( formGroupName === 'shippingAddress') {
+            this.shippingAddressState = data;
+          }
+          else {
+            this.billingAddressState = data;
+          }
+
+          formGroup.get('state').setValue(data[0]);
+        }
+      )
+  }
+
+  onSubmit(){
+    console.log(this.checkoutForm.get('Customer').value);
   }
 
 }
