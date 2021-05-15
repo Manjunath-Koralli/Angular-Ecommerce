@@ -48,10 +48,11 @@ export class CheckoutComponent implements OnInit {
         zipCode : new FormControl('' , [Validators.required,Validators.minLength(2)])
       }),
       creditCard : this.formBuilder.group({
-        cardType : [''],
-        nameOnCard : [''],
-        cardNumber : [''],
-        securityCode : [''],
+        cardType : new FormControl('' , [Validators.required,Validators.minLength(2)]),
+        nameOnCard : new FormControl('' , [Validators.required,Validators.minLength(2),
+                                              FormValidators.notOnlyWhitespace]),
+        cardNumber : new FormControl('' , [Validators.required,Validators.pattern('[0-9]{16}')]),
+        securityCode : new FormControl('' , [Validators.required,Validators.pattern('[0-9]{3}')]),
         expirationMonth : [''],
         expirationYear : ['']
       })
@@ -99,6 +100,12 @@ export class CheckoutComponent implements OnInit {
   get billingAddressstate(){ return this.checkoutForm.get('billingAddress.state'); }
   get billingAddresscountry(){ return this.checkoutForm.get('billingAddress.country'); }
   get billingAddresszipcode(){ return this.checkoutForm.get('billingAddress.zipCode'); }
+
+  get creditCardType(){ return this.checkoutForm.get('creditCard.cardType'); }
+  get creditCardHolder(){ return this.checkoutForm.get('creditCard.nameOnCard'); }
+  get creditCardNumber(){ return this.checkoutForm.get('creditCard.cardNumber'); }
+  get creditCardCvv(){ return this.checkoutForm.get('creditCard.securityCode'); }
+  
   
   copySAddrtoBAddr(event){
     if(event.target.checked){
