@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { FormServiceService } from 'src/app/services/form-service.service';
 import { Country } from 'src/app/common/country';
 import { State } from 'src/app/common/state';
+import { FormValidators } from 'src/app/validators/form-validators';
 
 @Component({
   selector: 'app-checkout',
@@ -27,23 +28,24 @@ export class CheckoutComponent implements OnInit {
   ngOnInit(): void {
     this.checkoutForm = this.formBuilder.group({
       customer : this.formBuilder.group({
-        firstName : [''],
-        lastName : [''],
-        email : ['']
+        firstName : new FormControl('' , [Validators.required,Validators.minLength(2),FormValidators.notOnlyWhitespace]),
+        lastName : new FormControl('' , [Validators.required,Validators.minLength(2),FormValidators.notOnlyWhitespace]),
+        email : new FormControl('' , [Validators.required,Validators.minLength(2),
+              Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')])
       }),
       shippingAddress : this.formBuilder.group({
-        street : [''],
-        city : [''],
-        state : [''],
-        country : [''],
-        zipCode : ['']
+        street : new FormControl('' , [Validators.required,Validators.minLength(2),FormValidators.notOnlyWhitespace]),
+        city : new FormControl('' , [Validators.required,Validators.minLength(2),FormValidators.notOnlyWhitespace]),
+        state : new FormControl('' , [Validators.required]),
+        country : new FormControl('' , [Validators.required]),
+        zipCode : new FormControl('' , [Validators.required,Validators.minLength(2),FormValidators.notOnlyWhitespace])
       }),
       billingAddress : this.formBuilder.group({
-        street : [''],
-        city : [''],
-        state : [''],
-        country : [''],
-        zipCode : ['']
+        street : new FormControl('' , [Validators.required,Validators.minLength(2)]),
+        city : new FormControl('' , [Validators.required,Validators.minLength(2)]),
+        state : new FormControl('' , [Validators.required,Validators.minLength(2)]),
+        country : new FormControl('' , [Validators.required,Validators.minLength(2)]),
+        zipCode : new FormControl('' , [Validators.required,Validators.minLength(2)])
       }),
       creditCard : this.formBuilder.group({
         cardType : [''],
@@ -81,6 +83,23 @@ export class CheckoutComponent implements OnInit {
     })
   }
 
+
+  get firstName(){ return this.checkoutForm.get('customer.firstName'); }
+  get lastName(){ return this.checkoutForm.get('customer.lastName'); }
+  get email(){ return this.checkoutForm.get('customer.email'); }
+
+  get shippingAddressstreet(){ return this.checkoutForm.get('shippingAddress.street'); }
+  get shippingAddresscity(){ return this.checkoutForm.get('shippingAddress.city'); }
+  get shippingAddressstate(){ return this.checkoutForm.get('shippingAddress.state'); }
+  get shippingAddresscountry(){ return this.checkoutForm.get('shippingAddress.country'); }
+  get shippingAddresszipcode(){ return this.checkoutForm.get('shippingAddress.zipCode'); }
+
+  get billingAddressstreet(){ return this.checkoutForm.get('billingAddress.street'); }
+  get billingAddressscity(){ return this.checkoutForm.get('billingAddress.city'); }
+  get billingAddressstate(){ return this.checkoutForm.get('billingAddress.state'); }
+  get billingAddresscountry(){ return this.checkoutForm.get('billingAddress.country'); }
+  get billingAddresszipcode(){ return this.checkoutForm.get('billingAddress.zipCode'); }
+  
   copySAddrtoBAddr(event){
     if(event.target.checked){
       this.checkoutForm.controls.billingAddress
@@ -140,7 +159,15 @@ export class CheckoutComponent implements OnInit {
   }
 
   onSubmit(){
-    console.log(this.checkoutForm.get('Customer').value);
+    if(this.checkoutForm.invalid){
+      // markAllAsTouched - triggers display of error messages
+      this.checkoutForm.markAllAsTouched();      
+    }
+    console.log(this.checkoutForm.get('customer').value);
+    console.log("Email address is: ", this.checkoutForm.get('customer').value.email);
+    console.log("Shipping Address country is ",this.checkoutForm.get('shippingAddress').value.country.name);
+    console.log("Shipping Address state is ",this.checkoutForm.get('shippingAddress').value.state.name);
+    console.log("Billing Address country is ",this.checkoutForm.get('billingAddress').value.country.name);
   }
 
 }

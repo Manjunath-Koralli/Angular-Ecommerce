@@ -3,7 +3,6 @@ import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Country } from '../common/country';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -25,6 +24,7 @@ export class FormServiceService {
     }
 
     //wrapper for observable object - data
+    //of - will wrap an object as an observable
     return of(monthData);
   }
 
