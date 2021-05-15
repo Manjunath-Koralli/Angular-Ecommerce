@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CartItem } from '../common/cart-item';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { CompileShallowModuleMetadata } from '@angular/compiler';
 
 @Injectable({
@@ -15,8 +15,8 @@ export class CartService {
   //to publish events in code
   //event will be sent to all subscribers
 
-  totalPrice : Subject<number> = new Subject<number>();
-  totalQuantity : Subject<number> = new Subject<number>();
+  totalPrice : Subject<number> = new BehaviorSubject<number>(0);
+  totalQuantity : Subject<number> = new BehaviorSubject<number>(0);
   
   constructor() { }
 
