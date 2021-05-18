@@ -18,8 +18,28 @@ export class CartService {
   totalPrice : Subject<number> = new BehaviorSubject<number>(0);
   totalQuantity : Subject<number> = new BehaviorSubject<number>(0);
   
-  constructor() { }
+  //Webbrowser Api Storage -  only when browser is active - if we close browser and open it again - data lost
+  //storage : Storage = sessionStorage;
 
+  //if we want data even after we close and reopen again - use localStorage
+  storage : Storage = localStorage;
+
+  constructor() { 
+
+    // read data from storage and assign to cartItems
+    let data = JSON.parse(this.storage.getItem('cartItems')); 
+
+    if(data != null) {
+      this.cartItems = data;
+      this.computeCartTotals();
+    }
+
+  }
+
+  persistCartItems(){    
+    //store to webstorage api
+    this.storage.setItem('cartItems', JSON.stringify(this.cartItems))
+  }
 
   addToCart(cartItem : CartItem){
 
@@ -74,6 +94,8 @@ export class CartService {
 
     this.logCartData(totalPriceValue,totalQuantityValue);
 
+    //persist cart data
+    this.persistCartItems();
   }
 
   logCartData(totalPriceValue: number, totalQuantityValue: number) {
