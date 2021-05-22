@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ProductService } from './services/product.service';
 import { ProductCategoryMenuComponent } from './components/product-category-menu/product-category-menu.component';
 import { SearchComponent } from './components/search/search.component';
@@ -25,6 +25,8 @@ import {
   OktaAuthGuard
 } from '@okta/okta-angular';
 import { MemberPageComponent } from './components/member-page/member-page.component';
+import { OrderHistoryComponent } from './components/order-history/order-history.component';
+import { AuthInterceptorService } from './services/auth-interceptor.service';
 
 const okta_config = Object.assign({
   onAuthRequired : (oktaAuth , injector) => {
@@ -35,6 +37,7 @@ const okta_config = Object.assign({
 
 const routes: Routes = [
   { path : 'members', component : MemberPageComponent, canActivate : [ OktaAuthGuard ]},
+  { path : 'order-history', component: OrderHistoryComponent, canActivate : [ OktaAuthGuard ]},
 
   { path : 'login/callback', component : OktaCallbackComponent},
   { path : 'login', component : LoginComponent},
@@ -62,7 +65,8 @@ const routes: Routes = [
     CheckoutComponent,
     LoginComponent,
     LoginStausComponent,
-    MemberPageComponent
+    MemberPageComponent,
+    OrderHistoryComponent
   ],
   imports: [
     BrowserModule,
@@ -72,7 +76,8 @@ const routes: Routes = [
     OktaAuthModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [ProductService, { provide: OKTA_CONFIG, useValue : okta_config}],
+  providers: [ProductService, { provide: OKTA_CONFIG, useValue : okta_config},
+          { provide: HTTP_INTERCEPTORS, useClass : AuthInterceptorService, multi : true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -19,10 +19,10 @@ export class CartService {
   totalQuantity : Subject<number> = new BehaviorSubject<number>(0);
   
   //Webbrowser Api Storage -  only when browser is active - if we close browser and open it again - data lost
-  //storage : Storage = sessionStorage;
+  storage : Storage = sessionStorage;
 
   //if we want data even after we close and reopen again - use localStorage
-  storage : Storage = localStorage;
+  //storage : Storage = localStorage;
 
   constructor() { 
 
